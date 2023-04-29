@@ -1,0 +1,112 @@
+- name: 更新软件源
+  shell:
+    cmd: apt-get update
+
+- name: 针对ubuntu切换sh
+  file:
+    src: /bin/bash
+    dest: /bin/sh
+    state: link
+
+- name: 针对ubuntu切换创建~/.bash_profile
+  file:
+    src: ~/.profile
+    dest: ~/.bash_profile
+    state: link
+
+- name: 设置时区 Asia/Shanghai
+  timezone:
+    name: Asia/Shanghai
+
+- name: 设置主机名
+  hostname: 'name={{ inventory_hostname }}'
+
+- name: 删除hosts里的dss-service
+  lineinfile:
+    dest:  /etc/hosts
+    state: absent
+    regexp: '.*node001.*'
+
+- name: 设置hosts
+  lineinfile:
+    path: /etc/hosts
+    insertbefore: '^127\.0\.0\.1'
+    line: "{{ ansible_default_ipv4.address }} {{ inventory_hostname }} namenode"
+
+- name: 添加本地解析
+  lineinfile:
+    path: /etc/hosts
+    insertbefore: '^127\.0\.0\.1'
+    state: present
+    line: "{{ ansible_default_ipv4.address }} {{ item }}"
+  with_items:
+    - dss-apiservice-server
+    - dss-flow-entrance
+    - dss-framework-orchestrator-server-dev
+    - dss-framework-project-server
+    - dss-guide-server
+    - dss-scriptis-server
+    - dss-workflow-server-dev
+    - exchangis-server
+    - linkis-cg-engineconn
+    - linkis-cg-engineconnmanager
+    - linkis-cg-engineplugin
+    - linkis-cg-entrance
+    - linkis-cg-linkismanager
+    - linkis-mg-eureka
+    - linkis-mg-gateway
+    - linkis-ps-publicservice
+    - streamis-server
+
+- name: 创建hadoop组
+  group: name=hadoop
+
+- name: 创建hadoop用户
+  user:
+    name: hadoop
+    group: hadoop
+    shell: /bin/bash
+    generate_ssh_key: yes
+    password: "{{ 'hadoop' | password_hash('sha512') }}"
+
+- name: 设置 authorized 密钥
+  authorized_key:
+    user: hadoop
+    state: present
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+
+- name: 修改sudoers给hadoop提权
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    insertafter: '^%wheel'
+    line: '%hadoop  ALL=(ALL)  NOPASSWD: ALL'
+
+- name: 安装pip
+  shell:
+    cmd: apt-get install -y python-pip
+
+- name: 获取pip版本
+  command: "pip -V"
+  register: pip_version
+
+- name: 打印pip版本
+  debug: var=pip_version.stdout
+
+- name: 安装画图模块matplotlib
+  command: "pip install matplotlib"
+
+- name: 安装基础软件
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - telnet
+    - tar
+    - sed
+    - dos2unix
+    - unzip
+    - zip
+    - expect
+    - rsync
+    - lsof

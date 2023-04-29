@@ -1,0 +1,45 @@
+---
+- name: 安装mysql
+  shell:
+    cmd: apt-get install -y mysql-server-5.7 mysql-client-5.7 python-mysqldb python-pexpect
+
+- name: 启动mysql服务
+  sudo: yes
+  service:
+    name: mysql
+    state: started
+    enabled: true
+
+- name: 修改mysql密码
+  sudo: yes
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ MYSQL_PASSWORD }}"
+    login_user: root
+    login_password: "{{ MYSQL_PASSWORD }}"
+    check_implicit_admin: yes
+    priv: "*.*:ALL,GRANT"
+  with_items:
+    - "%"
+
+- name: 配置本地密码
+  expect:
+    command: mysql_config_editor set --login-path=local --host=localhost --user=root --password
+    responses:
+      'Enter password:': "{{MYSQL_PASSWORD}}"
+
+- name: 修改root用户支持远程访问
+  command:  mysql --login-path=local -e "{{ item }}"
+  with_items:
+    - grant all privileges on *.* to 'root'@'%' identified by '{{ MYSQL_PASSWORD }}' with grant option;
+    - flush privileges;
+
+- name: 修改bind-ip
+  template:
+    src: mysqld.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+- name: 重启mysql服务
+  shell:
+    cmd: systemctl restart mysql

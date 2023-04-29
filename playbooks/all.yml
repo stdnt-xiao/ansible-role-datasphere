@@ -1,0 +1,15 @@
+- hosts: deploy
+  roles:
+  - basis
+  - java
+  - mysql
+#  - nginx
+#  - python3
+  - ambari
+
+- hosts: deploy
+  remote_user: hadoop
+  roles:
+  - linkis
+  - linkis-test
+  - dss
