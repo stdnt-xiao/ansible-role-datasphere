@@ -27,18 +27,21 @@ MYSQL_PASSWORD="xiaojian@321"
 
 # Hadoop 配置
 HADOOP_VERSION="3.1.1"
-HADOOP_HOME="/usr/hdp/current/hadoop-client"
+HADOOP_HOME="/usr/hdp/3.1.5.0-152/hadoop"
+HADOOP_CONF_DIR="/etc/hadoop/conf"
 HDFS_IP="{{ hostvars[groups['hadoop'][0]].ansible_ssh_host }}"
 HDFS_PORT="9000"
 HDFS_URL="hdfs://{{ HDFS_IP }}:{{ HDFS_PORT }}"
 
 # Hive 配置
 HIVE_VERSION="3.1.0"
-HIVE_HOME="/usr/hdp/current/hive-client"
+HIVE_HOME="/usr/hdp/3.1.5.0-152/hive"
+HIVE_CONF_DIR=/etc/hive/conf
 
 # Spark 配置
 SPARK_VERSION="2.3.2"
-SPARK_HOME="/usr/hdp/current/spark2-client"
+SPARK_HOME="/usr/hdp/3.1.5.0-152/spark2"
+SPARK_CONF_DIR=/etc/spark2/conf
 SPARK_IP="{{ hostvars[groups['hadoop'][0]].ansible_ssh_host }}"
 SPARK_PORT="7077"
 SPARK_URL="spark://{{ SPARK_IP }}:{{ SPARK_PORT }}"
