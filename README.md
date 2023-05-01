@@ -13,4 +13,3 @@ jdbc:mysql://node001:3306/hive?SrverTimezone=UTC&useUnicode=true&characterEncodi
 
 yarn.dns 8053
 ```
->>>>>>> master
