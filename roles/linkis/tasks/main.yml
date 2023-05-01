@@ -113,7 +113,7 @@
   with_fileglob:
     - "/usr/hdp/current/hadoop-client/conf/*.xml"
 
-- name: 修改依赖xml
+- name: 修改hadoop依赖xml
   shell:
     chdir: "{{ HADOOP_CONF_DIR }}"
     cmd: "{{ item }}"
@@ -130,7 +130,7 @@
   with_fileglob:
     - "/usr/hdp/current/hive-client/conf/*.xml"
 
-- name: 修改依赖xml
+- name: 修改hive依赖xml
   shell:
     chdir: "{{ HIVE_CONF_DIR }}"
     cmd: "{{ item }}"
