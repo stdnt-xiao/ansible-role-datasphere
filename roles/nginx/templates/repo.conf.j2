@@ -1,0 +1,12 @@
+server {
+    listen       {{AMBARI_REPO_PORT}};
+    server_name  127.0.0.1;                 # 服务器名（url）
+    client_max_body_size 4G;
+    root         /var/www/html;                 # 服务默认目录
+
+    location / {
+        autoindex            on;            # 开启访问目录下层文件
+        autoindex_exact_size on;
+        autoindex_localtime  on;
+    }
+}

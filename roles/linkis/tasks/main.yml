@@ -1,0 +1,235 @@
+- name: 创建linkis程序目录
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: hadoop
+    group: hadoop
+  with_items:
+    - "{{ LINKIS_HOME }}" 
+    - "{{ LINKIS_WEB_DIR }}"
+    - /data
+    - /opt/apache-linkis-{{ LINKIS_VERSION }}
+    - /opt/apache-linkis-{{ LINKIS_VERSION }}-web
+
+- name: 解压linkis安装包
+  shell: "tar zxf /mnt/dist/apache-linkis-{{ LINKIS_VERSION }}-bin.tar.gz -C /opt/apache-linkis-{{ LINKIS_VERSION }}/"
+
+- name: 配置权限
+  shell: "chown -R hadoop.hadoop /data /opt/apache-linkis-{{ LINKIS_VERSION }}"
+
+- name: 创建安装配置
+  template: 
+    src: "{{ item }}.j2"
+    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/deploy-config/{{ item }}"
+    owner: hadoop
+    group: hadoop
+  with_items:
+    - db.sh
+    - linkis-env.sh
+
+- name: 加载环境变量
+  shell: "source /etc/profile ~/.bashrc"
+
+- name: 创建hdfs:///linkis
+  shell: "sudo -u hdfs hdfs dfs -mkdir -p /linkis ; sudo -u hdfs hdfs dfs -chmod -R 777 /linkis"
+
+- name: 拷贝依赖的jar包
+  copy:
+    src:  "/mnt/dist/mysql-connector-java-5.1.49.jar"
+    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/linkis-package/lib/{{ item }}"
+  with_items:
+    - linkis-commons/public-module/
+    - linkis-spring-cloud-services/linkis-mg-gateway/
+
+- name: 设置软连接
+  file:
+    src: /home/hadoop/.profile
+    dest: "/home/hadoop/.bash_profile"
+    state: link
+
+- name: 关闭yum检测
+  replace:
+    path: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
+    regexp: "^need_cmd yum"
+    replace: "#need_cmd yum"
+
+- name: 修改安装脚本
+  replace:
+    path: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
+    regexp: '^   read.*'
+    replace: "   idx=1"
+
+- name: 修改安装脚本
+  lineinfile:
+    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/install.sh"
+    regexp: '^read'
+    line: "idx=2"
+
+- name: 安装linkis
+  shell:
+    chdir: "/opt/apache-linkis-{{ LINKIS_VERSION }}"
+    cmd: "source /etc/profile ~/.bashrc ; sh bin/install.sh"
+  register: install_info
+
+- name: 打印安装信息
+  debug: var=install_info.stdout_lines
+
+- name: 创建token配置
+  template: 
+    src: "token.properties.j2"
+    dest: "{{ LINKIS_HOME }}/conf/token.properties"
+
+- name: 复制依赖包
+  shell: "cp -r {{ HIVE_HOME }}/lib/{{ item }} {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/lib/"
+  with_items:
+    - datanucleus-api-jdo-4.2.4.jar
+    - datanucleus-rdbms-4.1.19.jar
+    - javax.jdo-3.2.0-m3.jar
+    - jdo-api-3.0.1.jar
+
+- name: 添加依赖包
+  copy:
+    owner: hadoop
+    group: hadoop
+    src: "{{ item }}"
+    dest: "{{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/lib/"
+  with_fileglob:
+    - /usr/hdp/current/zookeeper-server/zookeeper-3.4.6.3.1.5.0-152.jar
+    - /usr/hdp/current/tez-client/tez-*.jar
+    - /usr/hdp/current/hive-client/lib/hive-*.jar
+    - /usr/hdp/current/hadoop-yarn-client/lib/jackson-jaxrs-json-provider-2.10.0.jar
+    - /usr/hdp/current/hadoop-yarn-client/lib/jackson-jaxrs-base-2.10.0.jar
+    - /usr/hdp/current/hadoop-yarn-client/lib/jackson-module-jaxb-annotations-2.10.0.jar
+
+- name: 创建linkis程序目录
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: hadoop
+    group: hadoop
+  with_items:
+    - "{{ HADOOP_CONF_DIR }}"
+    - "{{ HIVE_CONF_DIR }}"
+
+- name: 添加hadoop依赖xml
+  copy:
+    owner: hadoop
+    group: hadoop
+    src: "{{ item }}"
+    dest: "{{HADOOP_CONF_DIR}}"
+  with_fileglob:
+    - "/usr/hdp/current/hadoop-client/conf/*.xml"
+
+- name: 修改hadoop依赖xml
+  shell:
+    chdir: "{{ HADOOP_CONF_DIR }}"
+    cmd: "{{ item }}"
+  with_items:
+    - sed -i 's/${hdp.version}/3.1.5.0-152/g' *.xml
+    - chown hadoop.hadoop *
+
+- name: 添加hive依赖xml
+  copy:
+    owner: hadoop
+    group: hadoop
+    src: "{{ item }}"
+    dest: "{{HIVE_CONF_DIR}}"
+  with_fileglob:
+    - "/usr/hdp/current/hive-client/conf/*.xml"
+
+- name: 修改hive依赖xml
+  shell:
+    chdir: "{{ HIVE_CONF_DIR }}"
+    cmd: "{{ item }}"
+  with_items:
+    - sed -i 's/${hdp.version}/3.1.5.0-152/g' *.xml
+    - chown hadoop.hadoop *
+
+- name: 修改hive配置文件，添加tez
+  lineinfile:
+    path: "{{ HIVE_CONF_DIR }}/hive-site.xml"
+    insertbefore: '^  </configuration>'
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - "    <property>"
+    - "        <name>tez.lib.uris</name>"
+    - "        <value>file:///usr/hdp/current/tez-client/lib/tez.tar.gz</value>"
+    - "    </property>"
+    - "    <property>"
+    - "        <name>hive.tez.container.size</name>"
+    - "        <value>10240</value>"
+    - "    </property>"
+
+- name: 添加hadoop环境变量
+  become: true
+  lineinfile:
+    dest: /etc/profile
+    regexp: "^export HADOOP_CONF_DIR="
+    state: present
+    line: export HADOOP_CONF_DIR={{HADOOP_CONF_DIR}}
+
+- name: 添加hive环境变量
+  become: true
+  lineinfile:
+    dest: /etc/profile
+    regexp: "^export HIVE_CONF_DIR="
+    state: present
+    line: export HIVE_CONF_DIR={{HIVE_CONF_DIR}}
+
+- name: 加载环境变量
+  shell: "source /etc/profile ~/.bashrc"
+
+- name: 启动linkis服务
+  shell:
+    chdir: "{{ LINKIS_HOME }}"
+    cmd: "source /etc/profile ~/.bashrc ; sh sbin/linkis-start-all.sh"
+  register: start_info
+  tags:
+    - restart
+
+- name: 打印linkis启动信息
+  debug: var=start_info.stdout_lines
+  tags:
+    - restart
+
+- name: 检查端口是否运行
+  wait_for: port={{ item }} state=started delay=1 timeout=30
+  with_items:
+    - 20303   # LINKIS-MG-EUREKA
+    - 9001    # LINKIS-MG-GATEWAY
+    - 9101    # LINKIS-CG-LINKISMANAGER
+    - 9102    # LINKIS-CG-ENGINECONNMANAGER
+    - 9104    # LINKIS-CG-ENTRANCE
+    - 9105    # LINKIS-PS-PUBLICSERVICE
+
+### 安装linkis前端 ###
+
+- name: 解压linkis前端包
+  shell: "tar zxf /mnt/dist/apache-linkis-{{ LINKIS_VERSION }}-web-bin.tar.gz -C /opt/apache-linkis-{{ LINKIS_VERSION }}-web/"
+
+- name: 创建linkis前端目录
+  file:
+    path: "{{ LINKIS_WEB_DIR }}"
+    state: directory
+    owner: hadoop
+    group: hadoop
+
+- name: 复制前端代码
+  shell:
+    chdir: /opt/apache-linkis-{{ LINKIS_VERSION }}-web
+    cmd: "cp -r dist/* {{ LINKIS_WEB_DIR }}/"
+
+- name: 创建nginx配置
+  become: true
+  template:
+    src: "linkis.conf.j2"
+    dest: /etc/nginx/conf.d/linkis.conf
+
+- name: 重载nginx配置
+  become: true
+  shell: nginx -s reload
+
+- name: 检查端口是否运行
+  wait_for: port={{ LINKIS_WEB_PORT }} state=started delay=1 timeout=30
