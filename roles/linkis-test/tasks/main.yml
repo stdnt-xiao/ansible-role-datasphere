@@ -11,7 +11,7 @@
 - name: 测试hive引擎任务
   shell:
     chdir: "{{ LINKIS_HOME }}"
-    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hadoop  -engineType hive-{{ HIVE_VERSION }}  -codeType hql  -code "show tables"
+    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hdfs  -engineType hive-{{ HIVE_VERSION }}  -codeType hql  -code "show tables"
   register: hive_info
 - name: 打印hive引擎任务结果
   debug: var=hive_info.stdout_lines

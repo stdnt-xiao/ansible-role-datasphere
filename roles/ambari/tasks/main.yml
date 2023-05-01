@@ -31,7 +31,7 @@
     dest: /etc/apt/sources.list.d/ambari.list
     state: present
     create: yes
-    line: "deb [trusted=yes] http://{{ ansible_ssh_host }}/ambari/ubuntu18/2.7.5.0-72/ Ambari main"
+    line: "deb [trusted=yes] http://{{ ansible_ssh_host }}:{{AMBARI_REPO_PORT}}/ambari/ubuntu18/2.7.5.0-72/ Ambari main"
 
 - name: 安装ambari-server
   shell:

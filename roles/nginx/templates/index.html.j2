@@ -10,7 +10,18 @@ font-family: Tahoma, Verdana, Arial, sans-serif; }
 </head>
 <body>
     <h1>DataSphere Studio</h1>
-    <p> Linkis Web: <a href="http://{{ ansible_ssh_host }}:{{ LINKIS_WEB_PORT }}">http://{{ ansible_ssh_host }}:{{ LINKIS_WEB_PORT }}</a></p>
+    <p> Ambari HDP REPO:</p>
+    <ul>
+            <li>ambari: http://{{ ansible_ssh_host }}:{{AMBARI_REPO_PORT}}/ambari/ubuntu18/2.7.5.0-72/</li>
+            <li>HDP-version: http://{{ ansible_ssh_host }}:{{AMBARI_REPO_PORT}}/ambari/ubuntu18/2.7.5.0-72/HDP-3.1.5.0-152.xml</li>
+            <li>HDP: http://{{ ansible_ssh_host }}:{{AMBARI_REPO_PORT}}/HDP/ubuntu18/3.1.5.0-152/</li>
+            <li>HDP-UTILS: http://{{ ansible_ssh_host }}:{{AMBARI_REPO_PORT}}/HDP-UTILS/ubuntu18/1.1.0.22/</li>
+    </ul>
+    <p> Ambari Web: <a href="http://{{ ansible_ssh_host }}:8080">http://{{ ansible_ssh_host }}:8080</a></p>
+    <ul>
+            <li>username: admin</li>
+            <li>password: admin</li>
+    </ul>
     <p> DSS Web: <a href="http://{{ ansible_ssh_host }}:{{ DSS_WEB_PORT }}">http://{{ ansible_ssh_host }}:{{ DSS_WEB_PORT }}</a>
     <ul>
         <li>username: hadoop</li>

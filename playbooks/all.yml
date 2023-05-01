@@ -3,7 +3,7 @@
   - basis
   - java
   - mysql
-#  - nginx
+  - nginx
 #  - python3
   - ambari
 
