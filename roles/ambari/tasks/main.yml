@@ -1,12 +1,4 @@
 ---
-- name: 安装apache2文件服务
-  shell:
-    cmd: apt-get install -y apache2
-
-- name: 删除文件服务默认页面
-  shell:
-    cmd: rm -fr /var/www/html/index.html
-
 - name: 创建/opt/ansible-role-datasphere/目录
   file:
     path: /opt/ansible-role-datasphere
@@ -35,7 +27,7 @@
 
 - name: 安装ambari-server
   shell:
-    cmd: apt-get update && apt-get install -y ambari-server ambari-agent unzip
+    cmd: apt-get update && apt-get install -y ambari-server ambari-agent
 
 - name: 修改metainfo.xml文件，禁用SMARTSENSE组件
   lineinfile:
@@ -59,8 +51,9 @@
     - source /opt/ansible-role-datasphere/roles/ambari/files/Ambari-DDL-MySQL-CREATE.sql;
 
 - name: hive数据库连接器
-  shell:
-    cmd: ambari-server setup --jdbc-db=mysql --jdbc-driver=/opt/ansible-role-datasphere/roles/ambari/files/mysql-connector-java-8.0.30.jar
+  copy:
+    src: mysql-connector-java-8.0.30.jar
+    dest: /var/lib/ambari-server/resources/mysql-connector-java-8.0.30.jar/
 
 - name: 创建ambari数据库
   command:  mysql --login-path=local -e "{{ item }}"

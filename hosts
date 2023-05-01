@@ -31,7 +31,7 @@ AMBARI_REPO_PORT="8000"
 # Hadoop 配置
 HADOOP_VERSION="3.1.1"
 HADOOP_HOME="/usr/hdp/3.1.5.0-152/hadoop"
-HADOOP_CONF_DIR="{{LINKIS_HOME}}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/conf/hadoop-conf/"
+HADOOP_CONF_DIR="{{LINKIS_HOME}}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/conf/hadoop-conf"
 HDFS_IP="{{ hostvars[groups['hadoop'][0]].ansible_ssh_host }}"
 HDFS_PORT="9000"
 HDFS_URL="hdfs://{{ HDFS_IP }}:{{ HDFS_PORT }}"
@@ -39,7 +39,7 @@ HDFS_URL="hdfs://{{ HDFS_IP }}:{{ HDFS_PORT }}"
 # Hive 配置
 HIVE_VERSION="3.1.0"
 HIVE_HOME="/usr/hdp/3.1.5.0-152/hive"
-HIVE_CONF_DIR="{{LINKIS_HOME}}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/conf/hive-conf/"
+HIVE_CONF_DIR="{{LINKIS_HOME}}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/conf/hive-conf"
 
 # Spark 配置
 SPARK_VERSION="2.3.2"

@@ -29,7 +29,7 @@
   become: true
   shell:
     chdir: "{{ VISUALIS_HOME }}"
-    cmd: "/usr/bin/cp -r ext/pf.ttf /usr/share/fonts/visualis/"
+    cmd: "cp -r ext/pf.ttf /usr/share/fonts/visualis/"
 
 - name: 加载字体
   become: true

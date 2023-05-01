@@ -80,6 +80,14 @@
     src: "token.properties.j2"
     dest: "{{ LINKIS_HOME }}/conf/token.properties"
 
+- name: 复制依赖包
+  shell: "cp -r {{ HIVE_HOME }}/lib/{{ item }} {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/lib/"
+  with_items:
+    - datanucleus-api-jdo-4.2.4.jar
+    - datanucleus-rdbms-4.1.19.jar
+    - javax.jdo-3.2.0-m3.jar
+    - jdo-api-3.0.1.jar
+
 - name: 添加依赖包
   copy:
     owner: hadoop
@@ -155,15 +163,17 @@
     - "    </property>"
 
 - name: 添加hadoop环境变量
+  become: true
   lineinfile:
-    dest: ~/.bashrc
+    dest: /etc/profile
     regexp: "^export HADOOP_CONF_DIR="
     state: present
     line: export HADOOP_CONF_DIR={{HADOOP_CONF_DIR}}
 
 - name: 添加hive环境变量
+  become: true
   lineinfile:
-    dest: ~/.bashrc
+    dest: /etc/profile
     regexp: "^export HIVE_CONF_DIR="
     state: present
     line: export HIVE_CONF_DIR={{HIVE_CONF_DIR}}

@@ -40,7 +40,7 @@
     group: hadoop
 
 - name: 准备依赖包
-  shell: "/usr/bin/cp -r {{ item }} {{ SQOOP_HOME }}/lib/"
+  shell: "cp -r {{ item }} {{ SQOOP_HOME }}/lib/"
   with_items:
     - "{{ HADOOP_HOME }}/share/hadoop/common/hadoop-common-2.7.2.jar"
     - "{{ HIVE_HOME }}/lib/hive-jdbc-2.3.3.jar"
