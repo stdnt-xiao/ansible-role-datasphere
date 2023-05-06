@@ -53,7 +53,13 @@
 - name: hive数据库连接器
   copy:
     src: mysql-connector-java-8.0.30.jar
-    dest: /var/lib/ambari-server/resources/mysql-connector-java-8.0.30.jar/
+    dest: /var/lib/ambari-server/resources/mysql-connector-java-8.0.30.jar
+
+- name: hive数据库连接器软链接
+  file:
+    src: /var/lib/ambari-server/resources/mysql-connector-java-8.0.30.jar
+    dest: /var/lib/ambari-server/resources/mysql-connector-java.jar
+    state: link
 
 - name: 创建ambari数据库
   command:  mysql --login-path=local -e "{{ item }}"
@@ -71,7 +77,7 @@
 - name: 添加ambari ambari.properties文件
   template: src=ambari.properties.j2 dest=/etc/ambari-server/conf/ambari.properties owner=root
 
-- name: #配置重启ambari-server脚本
+- name: 配置重启ambari-server脚本
   shell:
     cmd: ambari-server restart
 

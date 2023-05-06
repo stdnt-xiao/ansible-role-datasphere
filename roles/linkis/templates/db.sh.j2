@@ -24,6 +24,6 @@ MYSQL_PASSWORD={{ MYSQL_PASSWORD }}
 
 ### Provide the DB information of Hive metadata database.
 ### Attention! If there are special characters like "&", they need to be enclosed in quotation marks.
-HIVE_META_URL="jdbc:mysql://{{ hostvars[groups['mysql'][0]].ansible_ssh_host }}:{{ MYSQL_PORT }}/hive?useUnicode=true&amp;characterEncoding=UTF-8"
+HIVE_META_URL="jdbc:mysql://{{ hostvars[groups['mysql'][0]].ansible_ssh_host }}:{{ MYSQL_PORT }}/hive?useSSL=false\&characterEncoding=UTF-8\&allowMultiQueries=true\&useAffectedRows=true"
 HIVE_META_USER="{{ MYSQL_USERNAME }}"
 HIVE_META_PASSWORD="{{ MYSQL_PASSWORD }}"

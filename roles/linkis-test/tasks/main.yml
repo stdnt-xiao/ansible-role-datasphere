@@ -1,3 +1,9 @@
+### 前置条件
+- name: 添加hadoop权限
+  become: true
+  shell:
+    cmd: sudo -u hdfs hdfs dfs -chmod 777 /user
+
 ### shell
 - name: 测试shell引擎任务
   shell:
@@ -11,7 +17,7 @@
 - name: 测试hive引擎任务
   shell:
     chdir: "{{ LINKIS_HOME }}"
-    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hdfs  -engineType hive-{{ HIVE_VERSION }}  -codeType hql  -code "show tables"
+    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hadoop  -engineType hive-{{ HIVE_VERSION }}  -codeType hql  -code "show tables"
   register: hive_info
 - name: 打印hive引擎任务结果
   debug: var=hive_info.stdout_lines
@@ -20,7 +26,7 @@
 - name: 测试spark引擎任务
   shell:
     chdir: "{{ LINKIS_HOME }}"
-    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hdfs  -engineType spark-{{ SPARK_VERSION }} -codeType sql  -code "show tables"
+    cmd: source /etc/profile ~/.bashrc ; sh bin/linkis-cli -submitUser  hadoop  -engineType spark-{{ SPARK_VERSION }} -codeType sql  -code "show tables"
   register: spark_info
 - name: 打印spark引擎任务结果
   debug: var=spark_info.stdout_lines

@@ -22,6 +22,12 @@ font-family: Tahoma, Verdana, Arial, sans-serif; }
             <li>username: admin</li>
             <li>password: admin</li>
     </ul>
+    <p> Linkis Web: <a href="http://{{ ansible_ssh_host }}:{{ LINKIS_WEB_PORT }}">http://{{ ansible_ssh_host }}:{{ LINKIS_WEB_PORT }}</a>
+        <ul>
+            <li>username: hadoop</li>
+            <li>password: hadoop</li>
+        </ul>
+    </p>
     <p> DSS Web: <a href="http://{{ ansible_ssh_host }}:{{ DSS_WEB_PORT }}">http://{{ ansible_ssh_host }}:{{ DSS_WEB_PORT }}</a>
     <ul>
         <li>username: hadoop</li>

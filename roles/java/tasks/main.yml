@@ -22,18 +22,18 @@
       # Java Path
       export JAVA_HOME={{ JAVA_HOME }}
       export JRE_HOME={{ JAVA_HOME }}/jre
-      export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH
+      export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
       export PATH=$JAVA_HOME/bin:$PATH
   with_items:
     - /etc/profile
-    - ~/.bashrc
-    - /home/hadoop/.bashrc
+#    - ~/.bashrc
+#    - /home/hadoop/.bashrc
 
 - name: source env
   shell: "source {{ item }}"
   with_items:
     - /etc/profile
-    - ~/.bashrc
+#    - ~/.bashrc
 
 - name: 获取java版本
   command: "java -version"
