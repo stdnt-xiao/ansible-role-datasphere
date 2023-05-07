@@ -1,7 +1,15 @@
+- name: 测试sqoop
+  shell: "sqoop list-databases --connect jdbc:mysql://{{ hostvars[groups['mysql'][0]].ansible_ssh_host }}:{{ MYSQL_PORT }}/ --username {{ MYSQL_USERNAME }} --password {{ MYSQL_PASSWORD }}"
+  register: sqoop_info
+
+- name: 打印测试信息
+  debug: var=sqoop_info.stdout_lines
+
 - name: 创建exchangis库和用户
   command:  mysql -h{{ hostvars[groups['mysql'][0]].ansible_ssh_host }} -uroot -p{{ MYSQL_PASSWORD }} -e "{{ item }}"
   with_items:
     # 创建数据库
+    -  DROP DATABASE IF EXISTS exchangis;
     -  CREATE DATABASE exchangis DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
     -  GRANT ALL PRIVILEGES ON exchangis.* TO 'exchangis'@'%' IDENTIFIED BY 'exchangis';
     -  GRANT ALL PRIVILEGES ON exchangis.* TO 'exchangis'@'localhost' IDENTIFIED BY 'exchangis';
@@ -103,4 +111,9 @@
 - name: 重启engineplugin服务
   shell: 
     chdir: "{{ LINKIS_HOME }}/sbin"
-    cmd: "source /etc/profile ~/.bashrc ; sh linkis-daemon.sh restart cg-engineplugin"
+    cmd: "source /etc/profile ~/.bashrc ; sbin/linkis-start-all.sh"
+
+- name: 重启engineplugin服务
+  shell:
+    chdir: "{{ DSS_HOME }}"
+    cmd: "source /etc/profile ~/.bashrc ; sbin/dss-start-all.sh"

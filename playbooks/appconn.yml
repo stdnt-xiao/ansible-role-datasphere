@@ -1,9 +1,0 @@
-- hosts: deploy
-  remote_user: hadoop
-  roles:
-    - dolphinscheduler
-    - visualis
-    - qualitis
-    - streamis
-#    - sqoop
-#    - exchangis

@@ -1,5 +1,4 @@
 - hosts: deploy
   remote_user: hadoop
   roles:
-  - sqoop
   - exchangis
