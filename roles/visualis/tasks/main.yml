@@ -48,7 +48,7 @@
 - name: 配置代码路径
   shell:
     chdir: "{{ VISUALIS_HOME }}"
-    cmd: "/usr/bin/mv build web"
+    cmd: "mv build web"
 
 - name: 创建nginx配置
   become: true

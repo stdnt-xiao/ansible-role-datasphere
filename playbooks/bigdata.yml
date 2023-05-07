@@ -1,0 +1,7 @@
+- hosts: deploy
+  roles:
+  - basis
+  - java
+  - mysql
+  - nginx
+  - ambari
