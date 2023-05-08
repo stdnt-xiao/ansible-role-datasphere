@@ -1,4 +1,8 @@
-# TODO 添加hadoop免密登录本机
+- name: 配置hadoop免密登录
+  expect:
+    command: ssh-copy-id node001
+    responses:
+      '.*password:': "hadoop"
 
 - name: 创建dolphinscheduler库和用户
   command:  mysql -h{{ hostvars[groups['mysql'][0]].ansible_ssh_host }} -uroot -p{{ MYSQL_PASSWORD }} -e "{{ item }}"

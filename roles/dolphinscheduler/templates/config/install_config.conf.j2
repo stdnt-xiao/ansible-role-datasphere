@@ -51,14 +51,14 @@ hdfsRootUser="hadoop"
 # 配置 api server port
 apiServerPort="12345"
 # 在哪些机器上部署 DS 服务，本机选 localhost
-ips="localhost"
+ips="{{ inventory_hostname }}"
 # ssh端口，默认22
 sshPort="22"
 # master服务部署在哪台机器上
-masters="localhost"
+masters="{{ inventory_hostname }}"
 # worker服务部署在哪台机器上，并指定此 worker 属于哪一个 worker 组，下面示例的 default 即为组名
-workers="localhost:default"
+workers="{{ inventory_hostname }}:default"
 # 报警服务部署在哪台机器上
-alertServer="localhost"
+alertServer="{{ inventory_hostname }}"
 # 后端api服务部署在在哪台机器上
-apiServers="localhost"
+apiServers="{{ inventory_hostname }}"
