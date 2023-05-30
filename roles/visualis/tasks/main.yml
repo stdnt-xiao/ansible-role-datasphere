@@ -11,7 +11,7 @@
 
 - name: 解压visualis安装包
   become: true
-  shell: "unzip /mnt/dist/visualis-server.zip -d /opt/ && chown hadoop.hadoop -R {{ VISUALIS_HOME }}"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/visualis-server.zip -d /opt/ && chown hadoop.hadoop -R {{ VISUALIS_HOME }}"
 
 - name: 安装字体库
   become: true
@@ -43,7 +43,7 @@
 
 - name: 解压visualis前端包
   become: true
-  shell: "unzip /mnt/dist/visualis-web.zip -d {{ VISUALIS_HOME }}/ && chown hadoop.hadoop -R {{ VISUALIS_HOME }}/build"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/visualis-web.zip -d {{ VISUALIS_HOME }}/ && chown hadoop.hadoop -R {{ VISUALIS_HOME }}/build"
 
 - name: 配置代码路径
   shell:
@@ -77,7 +77,7 @@
 
 - name: 安装visualis appconn
   become: true
-  shell: "unzip /mnt/dist/visualis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown hadoop.hadoop -R {{ DSS_HOME }}/dss-appconns/visualis"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/visualis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown hadoop.hadoop -R {{ DSS_HOME }}/dss-appconns/visualis"
 
 - name: 注册appconn
   shell:

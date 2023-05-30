@@ -18,7 +18,7 @@
 
 - name: 解压源码包
   become: true
-  shell: "tar zxf /mnt/dist/wedatasphere-dss-{{ DSS_VERSION }}-dist.tar.gz -C /opt/wedatasphere-dss-{{ DSS_VERSION }}/"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/wedatasphere-dss-{{ DSS_VERSION }}-dist.tar.gz -C /opt/wedatasphere-dss-{{ DSS_VERSION }}/"
 
 - name: 配置权限
   become: true
@@ -95,7 +95,7 @@
 
 - name: 解压源码包
   become: true
-  shell: "unzip /mnt/dist/wedatasphere-dss-web-{{ DSS_VERSION }}-dist.zip -d /opt/wedatasphere-dss-{{ DSS_VERSION }}-web"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/wedatasphere-dss-web-{{ DSS_VERSION }}-dist.zip -d /opt/wedatasphere-dss-{{ DSS_VERSION }}-web"
 
 - name: 创建dss前端目录
   become: true

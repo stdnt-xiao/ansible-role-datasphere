@@ -43,3 +43,17 @@
 - name: 重启mysql服务
   shell:
     cmd: systemctl restart mysql
+
+- name: 拷贝mysql定时备份脚本
+  template:
+    src: mysql_dump_script.sh
+    dest: /opt/mysql_dump_script.sh
+
+- name: 'mysql数据库定时备份'
+  cron:
+    name: "mysql dump"
+    day: "*"
+    minute: "0"
+    hour: "7"
+    job: "/opt/mysql_dump_script.sh > /tmp/oldjob1.log"
+    state: present

@@ -17,7 +17,7 @@
 
 - name: 解压源码包
   become: true
-  shell: "tar zxf /mnt/dist/apache-dolphinscheduler-{{ DOLPHINSCHEDULER_VERSION }}-bin.tar.gz -C /opt/"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/apache-dolphinscheduler-{{ DOLPHINSCHEDULER_VERSION }}-bin.tar.gz -C /opt/"
 
 - name: 设置权限
   become: true
@@ -30,8 +30,8 @@
     src: "{{ item }}"
     dest: "/opt/apache-dolphinscheduler-{{ DOLPHINSCHEDULER_VERSION }}-bin/lib/"
   with_items:
-    - "/mnt/dist/dolphinscheduler-prod-metrics-1.1.0.jar"
-    - "/mnt/dist/mysql-connector-java-5.1.49.jar"
+    - "{{SOURCE_ROOT_PATH}}/dolphinscheduler-prod-metrics-1.1.0.jar"
+    - "{{SOURCE_ROOT_PATH}}/mysql-connector-java-5.1.49.jar"
 
 - name: 创建安装配置
   template: 
@@ -117,7 +117,7 @@
   copy:
     owner: hadoop
     group: hadoop
-    src: "/mnt/dist/dss-dolphinscheduler-token-1.1.0.jar"
+    src: "{{SOURCE_ROOT_PATH}}/dss-dolphinscheduler-token-1.1.0.jar"
     dest: "{{ DSS_HOME }}/lib/dss-framework/dss-framework-project-server/"
 
 - name: 创建nginx配置
@@ -140,7 +140,7 @@
 
 - name: 解压dss-dolphinscheduler-client安装包
   become: true
-  shell: "unzip /mnt/dist/dss-dolphinscheduler-client.zip -d /opt/ && chown hadoop.hadoop -R /opt/dss-dolphinscheduler-client"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/dss-dolphinscheduler-client.zip -d /opt/ && chown hadoop.hadoop -R /opt/dss-dolphinscheduler-client"
 
 - name: 创建dss-dolphinscheduler-client配置
   template:

@@ -9,7 +9,7 @@
 
 - name: 解压qualitis安装包
   become: true
-  shell: "unzip /mnt/dist/qualitis-{{ QUALITIS_VERSION }}.zip -d /opt/"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/qualitis-{{ QUALITIS_VERSION }}.zip -d /opt/"
 
 - name: 设置软连接
   become: true
@@ -40,7 +40,7 @@
 
 - name: 解压appconn
   become: true
-  shell: "unzip /mnt/dist/qualitis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown hadoop.hadoop -R {{ DSS_HOME }}/dss-appconns/qualitis"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/qualitis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown hadoop.hadoop -R {{ DSS_HOME }}/dss-appconns/qualitis"
 
 - name: 注册appconn
   shell:

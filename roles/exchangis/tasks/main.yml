@@ -31,7 +31,7 @@
 
 - name: 解压源码包
   become: true
-  shell: "tar zxf /mnt/dist/wedatasphere-exchangis-{{ EXCHANGIS_VERSION }}.tar.gz -C {{ EXCHANGIS_HOME }}"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/wedatasphere-exchangis-{{ EXCHANGIS_VERSION }}.tar.gz -C {{ EXCHANGIS_HOME }}"
 
 - name: 设置权限
   become: true
@@ -76,7 +76,7 @@
 
 - name: 压前端安装包
   become: true
-  shell: "unzip /mnt/dist/dist.zip -d {{ EXCHANGIS_HOME }}/ && chown -R hadoop.hadoop {{ EXCHANGIS_HOME }}/dist"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/dist.zip -d {{ EXCHANGIS_HOME }}/ && chown -R hadoop.hadoop {{ EXCHANGIS_HOME }}/dist"
 
 - name: 创建nginx配置
   become: true
@@ -93,7 +93,7 @@
 
 - name: 解压appconn包
   become: true
-  shell: "unzip /mnt/dist/exchangis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown -R hadoop.hadoop {{ DSS_HOME }}/dss-appconns/exchangis"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/exchangis-appconn.zip -d {{ DSS_HOME }}/dss-appconns/ && chown -R hadoop.hadoop {{ DSS_HOME }}/dss-appconns/exchangis"
 
 - name: 注册appconn
   shell:
@@ -106,7 +106,7 @@
 
 - name: 安装sqoop物料引擎
   become: true
-  shell: "unzip /mnt/dist/sqoop-engineconn.zip -d {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/ && chown -R hadoop.hadoop {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/sqoop"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/sqoop-engineconn.zip -d {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/ && chown -R hadoop.hadoop {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/sqoop"
 
 - name: 重启engineplugin服务
   shell: 
