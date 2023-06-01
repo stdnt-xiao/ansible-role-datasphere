@@ -13,10 +13,10 @@ apt-get install -y apache2
 rm -fr /var/www/html/index.html
 
 # 解压文件到/opt/repo/目录
-tar -zxvf /opt/ansible-role-datasphere/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/ambari-2.7.5.0-ubuntu18.tar.gz -C /var/www/html/
-tar -zxvf /opt/ansible-role-datasphere/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-3.1.5.0-ubuntu18-deb.tar.gz -C /var/www/html/
-tar -zxvf /opt/ansible-role-datasphere/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-GPL-3.1.5.0-ubuntu18-gpl.tar.gz -C /var/www/html/
-tar -zxvf /opt/ansible-role-datasphere/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-UTILS-1.1.0.22-ubuntu18.tar.gz -C /var/www/html/
+tar -zxvf /mnt/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/ambari-2.7.5.0-ubuntu18.tar.gz -C /var/www/html/
+tar -zxvf /mnt/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-3.1.5.0-ubuntu18-deb.tar.gz -C /var/www/html/
+tar -zxvf /mnt/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-GPL-3.1.5.0-ubuntu18-gpl.tar.gz -C /var/www/html/
+tar -zxvf /mnt/dist/cloudera-Ambari-2.7.5.0-Hadoop-3.1.5-ubuntu18/HDP-UTILS-1.1.0.22-ubuntu18.tar.gz -C /var/www/html/
 
 # 配置ambari、hdp软件源
 cat >/etc/apt/sources.list.d/local.list <<EOF
@@ -32,7 +32,7 @@ apt-get update
 cd /var/cache/apt/archives/
 apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances apache2 | grep "^\w" | sort -u)
 apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ambari-server | grep "^\w" | sort -u)
-apt-get -d -y install unzip apache2 ansible keepalived mysql-server-5.7 mysql-client-5.7 sshpass python3-mysqldb python-pexpect
+apt-get -d -y install unzip apache2 ansible keepalived mysql-server-5.7 mysql-client-5.7 sshpass python-mysqldb python-pexpect python-pip python-apt python-apt-common telnet tar sed dos2unix unzip zip expect rsync lsof
 ls -l -R /var/www/html/ | grep deb | awk '{split($9, array, "_");print array[1]}' | xargs apt-get -d -y install
 
 # 生成离线debs包（过滤掉ambari、hdp）
@@ -45,4 +45,6 @@ apt-ftparchive packages local > local/Packages
 gzip -c local/Packages > local/Packages.gz
 apt-ftparchive release local > local/Release
 tar -czvf local.debs.tar.gz local
-cp -r local.debs.tar.gz /opt/ansible-role-ambari/
+cp -r local.debs.tar.gz /mnt/dist/
+
+systemctl stop apache2

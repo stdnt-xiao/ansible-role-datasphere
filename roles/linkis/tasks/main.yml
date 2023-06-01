@@ -1,3 +1,28 @@
+- name: 添加本地解析
+  become: true
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ ansible_default_ipv4.address }} {{ item }}"
+  with_items:
+    - dss-apiservice-server
+    - dss-flow-entrance
+    - dss-framework-orchestrator-server-dev
+    - dss-framework-project-server
+    - dss-guide-server
+    - dss-scriptis-server
+    - dss-workflow-server-dev
+    - exchangis-server
+    - linkis-cg-engineconn
+    - linkis-cg-engineconnmanager
+    - linkis-cg-engineplugin
+    - linkis-cg-entrance
+    - linkis-cg-linkismanager
+    - linkis-mg-eureka
+    - linkis-mg-gateway
+    - linkis-ps-publicservice
+    - streamis-server
+
 - name: 创建linkis程序目录
   become: true
   file:
@@ -6,7 +31,7 @@
     owner: hadoop
     group: hadoop
   with_items:
-    - "{{ LINKIS_HOME }}" 
+    - "{{ LINKIS_HOME }}"
     - "{{ LINKIS_WEB_DIR }}"
     - /data
     - /opt/apache-linkis-{{ LINKIS_VERSION }}
@@ -19,7 +44,7 @@
   shell: "chown -R hadoop.hadoop /data /opt/apache-linkis-{{ LINKIS_VERSION }}"
 
 - name: 创建安装配置
-  template: 
+  template:
     src: "{{ item }}.j2"
     dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/deploy-config/{{ item }}"
     owner: hadoop
@@ -75,13 +100,29 @@
 - name: 打印安装信息
   debug: var=install_info.stdout_lines
 
-- name: 复制依赖包
-  shell: "cp -r {{ HIVE_HOME }}/lib/{{ item }} {{ LINKIS_HOME }}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/lib/"
+- name: 删除hive等旧版依赖包
+  file:
+    path: "{{ item }}"
+    state: absent
   with_items:
-    - datanucleus-api-jdo-4.2.4.jar
-    - datanucleus-rdbms-4.1.19.jar
-    - javax.jdo-3.2.0-m3.jar
-    - jdo-api-3.0.1.jar
+    - ~/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-exec-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-client-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-mapreduce-client-common-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-mapreduce-client-core-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-mapreduce-client-jobclient-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-yarn-api-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-yarn-client-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-yarn-common-3.1.1.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-yarn-registry-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-classification-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-common-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-exec-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-llap-client-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-llap-common-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-llap-tez-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-storage-api-2.7.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-upgrade-acid-3.1.0.jar
+    - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-vector-code-gen-3.1.0.jar
 
 - name: 添加依赖包
   copy:
@@ -92,10 +133,17 @@
   with_fileglob:
     - /usr/hdp/current/zookeeper-server/zookeeper-3.4.6.3.1.5.0-152.jar
     - /usr/hdp/current/tez-client/tez-*.jar
-    - /usr/hdp/current/hive-client/lib/hive-*.jar
+    - /usr/hdp/3.1.5.0-152/spark2/jars/hadoop-client-3.1.1.3.1.5.0-152.jar
+    - /usr/hdp/current/hadoop-mapreduce-client/hadoop-mapreduce-client-*.jar
+    - /usr/hdp/current/hadoop-yarn-client/hadoop-yarn*.jar
+    - /usr/hdp/current/hive-client/lib/hive*.jar
     - /usr/hdp/current/hadoop-yarn-client/lib/jackson-jaxrs-json-provider-2.10.0.jar
     - /usr/hdp/current/hadoop-yarn-client/lib/jackson-jaxrs-base-2.10.0.jar
     - /usr/hdp/current/hadoop-yarn-client/lib/jackson-module-jaxb-annotations-2.10.0.jar
+    - /usr/hdp/3.1.5.0-152/hive/lib/datanucleus-api-jdo-4.2.4.jar
+    - /usr/hdp/3.1.5.0-152/hive/lib/datanucleus-rdbms-4.1.19.jar
+    - /usr/hdp/3.1.5.0-152/hive/lib/javax.jdo-3.2.0-m3.jar
+    - /usr/hdp/3.1.5.0-152/hive/lib/jdo-api-3.0.1.jar
 
 - name: 创建linkis程序目录
   file:
@@ -154,8 +202,12 @@
     - "    </property>"
     - "    <property>"
     - "        <name>hive.tez.container.size</name>"
-    - "        <value>10240</value>"
+    - "        <value>1024</value>"
     - "    </property>"
+#    - "    <property>"
+#    - "        <name>hadoop.zk.address</name>"
+#    - "        <value>localhost:2181</value>"
+#    - "    </property>"
 
 - name: 添加hadoop环境变量
   become: true

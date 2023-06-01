@@ -2,6 +2,7 @@
   expect:
     command: ssh-copy-id node001
     responses:
+      'Are you sure you want to continue connecting \(yes/no\)\?': 'yes\n'
       '.*password:': "hadoop"
 
 - name: 创建dolphinscheduler库和用户

@@ -13,3 +13,8 @@ jdbc:mysql://node001:3306/hive?SrverTimezone=UTC&useUnicode=true&characterEncodi
 
 yarn.dns 8053
 ```
+### linkis安装
+```
+/home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib 修改jar需要重启所有服务
+sh bin/linkis-cli -submitUser  hadoop  -engineType hive-3.1.0  -codeType hql  -code "show tables"
+```

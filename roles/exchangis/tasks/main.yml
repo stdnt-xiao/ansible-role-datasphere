@@ -110,7 +110,7 @@
 
 - name: 重启engineplugin服务
   shell: 
-    chdir: "{{ LINKIS_HOME }}/sbin"
+    chdir: "{{ LINKIS_HOME }}"
     cmd: "source /etc/profile ~/.bashrc ; sbin/linkis-start-all.sh"
 
 - name: 重启engineplugin服务

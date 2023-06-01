@@ -33,31 +33,6 @@
     insertbefore: '^127\.0\.0\.1'
     line: "{{ ansible_default_ipv4.address }} {{ inventory_hostname }} namenode"
 
-- name: 添加本地解析
-  lineinfile:
-    path: /etc/hosts
-    insertbefore: '^127\.0\.0\.1'
-    state: present
-    line: "{{ ansible_default_ipv4.address }} {{ item }}"
-  with_items:
-    - dss-apiservice-server
-    - dss-flow-entrance
-    - dss-framework-orchestrator-server-dev
-    - dss-framework-project-server
-    - dss-guide-server
-    - dss-scriptis-server
-    - dss-workflow-server-dev
-    - exchangis-server
-    - linkis-cg-engineconn
-    - linkis-cg-engineconnmanager
-    - linkis-cg-engineplugin
-    - linkis-cg-entrance
-    - linkis-cg-linkismanager
-    - linkis-mg-eureka
-    - linkis-mg-gateway
-    - linkis-ps-publicservice
-    - streamis-server
-
 - name: 创建hadoop组
   group: name=hadoop
 

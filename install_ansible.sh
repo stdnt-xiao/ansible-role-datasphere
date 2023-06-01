@@ -6,12 +6,12 @@ sudo rm /var/cache/apt/archives/lock
 
 #解压文档
 mkdir -p /opt/debs/
-tar -zxvf /opt/ansible-role-datasphere/dist/local.debs.tar.gz -C /opt/debs/
+tar -zxvf /mnt/dist/local.debs.tar.gz -C /opt/debs/
 
 #配置本地软件源
 mv /etc/apt/sources.list /etc/apt/sources.list.bk
 echo "deb [trusted=yes] file:/opt/debs local/" > /etc/apt/sources.list.d/local.list
-#apt-get update
+apt-get update
 
 #安装软件
 apt-get install -y ansible python-pexpect sshpass
