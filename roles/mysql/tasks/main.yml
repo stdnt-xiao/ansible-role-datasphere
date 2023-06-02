@@ -51,9 +51,9 @@
 
 - name: 'mysql数据库定时备份'
   cron:
-    name: "mysql dump"
+    name: "数据库定时备份"
     day: "*"
     minute: "0"
     hour: "7"
-    job: "/opt/mysql_dump_script.sh > /tmp/oldjob1.log"
+    job: "/opt/mysql_dump_script.sh >> /tmp/mysqldump.log"
     state: present

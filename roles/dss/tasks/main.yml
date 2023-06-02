@@ -69,6 +69,20 @@
     cmd: "chmod +x sbin/*.sh"
   register: install_info
 
+- name: 创建appconn脚本
+  template:
+    src: "appconn-install.sh.j2"
+    dest: "/opt/wedatasphere-dss-{{ DSS_VERSION }}/bin/appconn-install.sh"
+    owner: hadoop
+    group: hadoop
+
+- name: 修改配置文件
+  template:
+    src: "dss-flow-execution-server.properties.j2"
+    dest: "/home/hadoop/dss/conf/dss-flow-execution-server.properties"
+    owner: hadoop
+    group: hadoop
+
 - name: 启动dss服务
   shell:
     chdir: "{{ DSS_HOME }}"

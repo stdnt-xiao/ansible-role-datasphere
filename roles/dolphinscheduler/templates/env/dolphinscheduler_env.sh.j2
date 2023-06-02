@@ -16,7 +16,7 @@
 #
 
 export HADOOP_HOME={{ HADOOP_HOME }}
-export HADOOP_CONF_DIR={{ HADOOP_HOME }}/etc/hadoop
+export HADOOP_CONF_DIR="{{LINKIS_HOME}}/lib/linkis-engineconn-plugins/hive/dist/{{HIVE_VERSION}}/conf/hadoop-conf"
 export SPARK_HOME1={{ SPARK_HOME }}
 #export SPARK_HOME2=/opt/spark2
 export PYTHON_HOME=/usr/local/python3
@@ -24,5 +24,6 @@ export JAVA_HOME={{ JAVA_HOME }}
 export HIVE_HOME={{ HIVE_HOME }}
 #export FLINK_HOME=/opt/flink
 #export DATAX_HOME=/opt/datax
+export LINKIS_VERSION={{LINKIS_VERSION}}
 
 export PATH=$HADOOP_HOME/bin:$SPARK_HOME1/bin:$SPARK_HOME2/bin:$PYTHON_HOME:$JAVA_HOME/bin:$HIVE_HOME/bin:$FLINK_HOME/bin:$DATAX_HOME/bin:$PATH

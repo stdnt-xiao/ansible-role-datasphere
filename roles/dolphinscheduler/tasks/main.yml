@@ -143,6 +143,11 @@
   become: true
   shell: "unzip {{SOURCE_ROOT_PATH}}/dss-dolphinscheduler-client.zip -d /opt/ && chown hadoop.hadoop -R /opt/dss-dolphinscheduler-client"
 
+- name: 解决hive调度引擎错误 #https://cwiki.apache.org/confluence/plugins/servlet/mobile#content/view/235838391
+  shell: "cp -r {{ item }} /opt/dss-dolphinscheduler-client/lib/"
+  with_items:
+    - "{{ LINKIS_HOME }}/lib/linkis-computation-governance/linkis-client/linkis-cli/linkis-label-common-1.3.2.jar"
+
 - name: 创建dss-dolphinscheduler-client配置
   template:
     src: "linkis.properties.j2"
