@@ -13,6 +13,15 @@
 方法二、下载编译 https://github.com/stdnt-xiao/linkis/tree/release-1.3.2-hdp3.1.5
 ```
 
+### 安装步骤
+* 节点密钥配置
+* 拷贝软件包到/opt目录
+* 构建本地debs包
+* 安装ansible
+* 安装java、nginx、ambari
+* 通过ambari部署hdp组件
+* 部署linkis+dss
+
 ### ambari安装
 ```text
 ambari-server setup --jdbc-db=mysql --jdbc-driver=/opt/ansible-role-datasphere/roles/ambari/files/mysql-connector-java-8.0.30.jar
@@ -28,4 +37,23 @@ sh bin/linkis-cli -submitUser  hadoop  -engineType hive-3.1.0  -codeType hql  -c
 ### dss安装
 ```text
 /home/hadoop/dss/conf/dss-flow-execution-server.properties
+```
+
+```
+[hadoop@6c9f3ece5ee9 Install]$ ll
+total 88
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:58 dss
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:59 exchangis
+drwxr-xr-x  1 hadoop hadoop 4096 Apr 13 07:03 flink
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 17 08:58 hadoop-2.7.2
+drwxr-xr-x  1 hadoop hadoop 4096 Apr 26 13:35 hive
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 linkis
+drwxr-xr-x  1 hadoop hadoop 4096 May  4 07:13 qualitis
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:58 schedulis
+drwxr-xr-x 15 hadoop hadoop 4096 Mar 16 03:57 spark
+drwxr-xr-x  5 hadoop hadoop 4096 Mar 16 03:57 spark-cmd
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 streamis
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 visualis
+drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 web
+[hadoop@6c9f3ece5ee9 Install]$ cd schedulis/
 ```
