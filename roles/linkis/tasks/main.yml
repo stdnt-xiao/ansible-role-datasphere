@@ -34,19 +34,19 @@
     - "{{ LINKIS_HOME }}"
     - "{{ LINKIS_WEB_DIR }}"
     - /data
-    - /opt/apache-linkis-{{ LINKIS_VERSION }}
-    - /opt/apache-linkis-{{ LINKIS_VERSION }}-web
+    - /home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}
+    - /home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}-web
 
 - name: 解压linkis安装包
-  shell: "tar zxf {{SOURCE_ROOT_PATH}}/apache-linkis-{{ LINKIS_VERSION }}-bin.tar.gz -C /opt/apache-linkis-{{ LINKIS_VERSION }}/"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/apache-linkis-{{ LINKIS_VERSION }}-bin.tar.gz -C /home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/"
 
-- name: 配置权限
-  shell: "chown -R hadoop.hadoop /data /opt/apache-linkis-{{ LINKIS_VERSION }}"
+#- name: 配置权限
+#  shell: "chown -R hadoop.hadoop /data /opt/apache-linkis-{{ LINKIS_VERSION }}"
 
 - name: 创建安装配置
   template:
     src: "{{ item }}.j2"
-    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/deploy-config/{{ item }}"
+    dest: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/deploy-config/{{ item }}"
     owner: hadoop
     group: hadoop
   with_items:
@@ -62,7 +62,7 @@
 - name: 拷贝依赖的jar包
   copy:
     src:  "{{SOURCE_ROOT_PATH}}/mysql-connector-java-5.1.49.jar"
-    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/linkis-package/lib/{{ item }}"
+    dest: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/linkis-package/lib/{{ item }}"
   with_items:
     - linkis-commons/public-module/
     - linkis-spring-cloud-services/linkis-mg-gateway/
@@ -75,25 +75,25 @@
 
 - name: 关闭yum检测
   replace:
-    path: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
+    path: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
     regexp: "^need_cmd yum"
     replace: "#need_cmd yum"
 
 - name: 修改安装脚本
   replace:
-    path: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
+    path: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/bin/checkEnv.sh"
     regexp: '^   read.*'
     replace: "   idx=1"
 
 - name: 修改安装脚本
   lineinfile:
-    dest: "/opt/apache-linkis-{{ LINKIS_VERSION }}/bin/install.sh"
+    dest: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}/bin/install.sh"
     regexp: '^read'
     line: "idx=2"
 
 - name: 安装linkis
   shell:
-    chdir: "/opt/apache-linkis-{{ LINKIS_VERSION }}"
+    chdir: "/home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}"
     cmd: "source /etc/profile ~/.bashrc ; sh bin/install.sh"
   register: install_info
 
@@ -105,7 +105,6 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - ~/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hive-exec-3.1.0.jar
     - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-client-3.1.1.jar
     - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-mapreduce-client-common-3.1.1.jar
     - /home/hadoop/linkis/lib/linkis-engineconn-plugins/hive/dist/3.1.0/lib/hadoop-mapreduce-client-core-3.1.1.jar
@@ -204,10 +203,6 @@
     - "        <name>hive.tez.container.size</name>"
     - "        <value>1024</value>"
     - "    </property>"
-#    - "    <property>"
-#    - "        <name>hadoop.zk.address</name>"
-#    - "        <value>localhost:2181</value>"
-#    - "    </property>"
 
 - name: 添加hadoop环境变量
   become: true
@@ -239,9 +234,6 @@
     - INSERT INTO `linkis_mg_gateway_auth_token`(`token_name`,`legal_users`,`legal_hosts`,`business_owner`,`create_time`,`update_time`,`elapse_day`,`update_by`) VALUES ('DSM-AUTH','*','*','BDP',curdate(),curdate(),-1,'LINKIS');
     - INSERT INTO `linkis_mg_gateway_auth_token`(`token_name`,`legal_users`,`legal_hosts`,`business_owner`,`create_time`,`update_time`,`elapse_day`,`update_by`) VALUES ('LINKIS_CLI_TEST','*','*','BDP',curdate(),curdate(),-1,'LINKIS');
 
-- name: 加载环境变量
-  shell: "source /etc/profile ~/.bashrc"
-
 - name: 启动linkis服务
   shell:
     chdir: "{{ LINKIS_HOME }}"
@@ -266,9 +258,8 @@
     - 9105    # LINKIS-PS-PUBLICSERVICE
 
 ### 安装linkis前端 ###
-
 - name: 解压linkis前端包
-  shell: "tar zxf {{SOURCE_ROOT_PATH}}/apache-linkis-{{ LINKIS_VERSION }}-web-bin.tar.gz -C /opt/apache-linkis-{{ LINKIS_VERSION }}-web/"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/apache-linkis-{{ LINKIS_VERSION }}-web-bin.tar.gz -C /home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}-web/"
 
 - name: 创建linkis前端目录
   file:
@@ -279,7 +270,7 @@
 
 - name: 复制前端代码
   shell:
-    chdir: /opt/apache-linkis-{{ LINKIS_VERSION }}-web
+    chdir: /home/hadoop/datasphere_install/apache-linkis-{{ LINKIS_VERSION }}-web
     cmd: "cp -r dist/* {{ LINKIS_WEB_DIR }}/"
 
 - name: 创建nginx配置

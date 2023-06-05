@@ -8,26 +8,26 @@
   with_items:
     - "{{ DSS_HOME }}"
     - "{{ DSS_WEB_DIR }}"
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}-web
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}/appcom
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}/appcom/dss
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}/appcom/uploads
-    - /opt/wedatasphere-dss-{{ DSS_VERSION }}/appcom/wds/scheduler
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}-web
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/appcom
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/appcom/dss
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/appcom/uploads
+    - /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/appcom/wds/scheduler
     - /appcom
 
 - name: 解压源码包
   become: true
-  shell: "tar zxf {{SOURCE_ROOT_PATH}}/wedatasphere-dss-{{ DSS_VERSION }}-dist.tar.gz -C /opt/wedatasphere-dss-{{ DSS_VERSION }}/"
+  shell: "tar zxf {{SOURCE_ROOT_PATH}}/wedatasphere-dss-{{ DSS_VERSION }}-dist.tar.gz -C /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/"
 
 - name: 配置权限
   become: true
-  shell: "chown -R hadoop.hadoop /opt/wedatasphere-dss-{{ DSS_VERSION }} /opt/wedatasphere-dss-{{ DSS_VERSION }}-web"
+  shell: "chown -R hadoop.hadoop /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }} /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}-web"
 
 - name: 创建安装配置
   template:
     src: "{{ item }}.j2"
-    dest: "/opt/wedatasphere-dss-{{ DSS_VERSION }}/config/{{ item }}"
+    dest: "/home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/config/{{ item }}"
     owner: hadoop
     group: hadoop
   with_items:
@@ -37,13 +37,13 @@
 - name: 创建appconn脚本
   template:
     src: "appconn-install.sh.j2"
-    dest: "/opt/wedatasphere-dss-{{ DSS_VERSION }}/bin/appconn-install.sh"
+    dest: "/home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/bin/appconn-install.sh"
     owner: hadoop
     group: hadoop
 
 - name: 修改安装脚本
   lineinfile:
-    dest: "/opt/wedatasphere-dss-{{ DSS_VERSION }}/bin/executeSQL.sh"
+    dest: "/home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/bin/executeSQL.sh"
     regexp: '^  read'
     line: "  idx=2"
 
@@ -56,7 +56,7 @@
 
 - name: 安装dss
   shell:
-    chdir: "/opt/wedatasphere-dss-{{ DSS_VERSION }}"
+    chdir: "/home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}"
     cmd: "source /etc/profile ~/.bashrc ; sh bin/install.sh"
   register: install_info
 
@@ -68,13 +68,6 @@
     chdir: "{{ DSS_HOME }}"
     cmd: "chmod +x sbin/*.sh"
   register: install_info
-
-- name: 创建appconn脚本
-  template:
-    src: "appconn-install.sh.j2"
-    dest: "/opt/wedatasphere-dss-{{ DSS_VERSION }}/bin/appconn-install.sh"
-    owner: hadoop
-    group: hadoop
 
 - name: 修改配置文件
   template:
@@ -109,7 +102,7 @@
 
 - name: 解压源码包
   become: true
-  shell: "unzip {{SOURCE_ROOT_PATH}}/wedatasphere-dss-web-{{ DSS_VERSION }}-dist.zip -d /opt/wedatasphere-dss-{{ DSS_VERSION }}-web"
+  shell: "unzip {{SOURCE_ROOT_PATH}}/wedatasphere-dss-web-{{ DSS_VERSION }}-dist.zip -d /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}-web"
 
 - name: 创建dss前端目录
   become: true
@@ -121,7 +114,7 @@
 
 - name: 复制前端代码
   shell:
-    chdir: /opt/wedatasphere-dss-{{ DSS_VERSION }}-web
+    chdir: /home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}-web
     cmd: "cp -r dist/* {{ DSS_WEB_DIR }}/"
 
 - name: 创建nginx配置
