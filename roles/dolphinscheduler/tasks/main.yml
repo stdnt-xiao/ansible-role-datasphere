@@ -1,6 +1,6 @@
 - name: 配置hadoop免密登录
   expect:
-    command: ssh-copy-id node001
+    command: ssh-copy-id {{ inventory_hostname }}
     responses:
       'Are you sure you want to continue connecting \(yes/no\)\?': 'yes\n'
       '.*password:': "hadoop"

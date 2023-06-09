@@ -40,56 +40,14 @@ sh bin/linkis-cli -submitUser  hadoop  -engineType hive-3.1.0  -codeType hql  -c
 ```
 
 ```
-[hadoop@6c9f3ece5ee9 Install]$ ll
-total 88
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:58 dss
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:59 exchangis
-drwxr-xr-x  1 hadoop hadoop 4096 Apr 13 07:03 flink
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 17 08:58 hadoop-2.7.2
-drwxr-xr-x  1 hadoop hadoop 4096 Apr 26 13:35 hive
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 linkis
-drwxr-xr-x  1 hadoop hadoop 4096 May  4 07:13 qualitis
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:58 schedulis
-drwxr-xr-x 15 hadoop hadoop 4096 Mar 16 03:57 spark
-drwxr-xr-x  5 hadoop hadoop 4096 Mar 16 03:57 spark-cmd
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 streamis
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 visualis
-drwxr-xr-x  1 hadoop hadoop 4096 Mar 16 03:57 web
-[hadoop@6c9f3ece5ee9 Install]$ cd schedulis/
-```
 
-root@node001:/opt# ll
-total 48
-drwxr-xr-x 11 root   root   4096 Jun  2 16:10 ./
-drwxr-xr-x 27 root   root   4096 Jun  2 16:10 ../
-drwxr-xr-x  6 root   root   4096 Jun  2 15:33 ansible-role-datasphere/
-drwxr-xr-x 10 hadoop hadoop 4096 Jun  2 16:10 apache-dolphinscheduler-1.3.9-bin/
-drwxr-xr-x  8 hadoop hadoop 4096 Jun  2 16:03 apache-linkis-1.3.2/
-drwxr-xr-x  4 hadoop hadoop 4096 Jun  2 16:06 apache-linkis-1.3.2-web/
-drwxr-xr-x  3 root   root   4096 Jun  2 15:32 debs/
-drwxr-xr-x 12 hadoop hadoop 4096 Jun  2 16:10 dolphinscheduler/
-drwxrwxrwx  6 hadoop hadoop 4096 Jul  1  2022 dss-dolphinscheduler-client/
--rw-r--r--  1 root   root   1003 Jun  2 15:34 mysql_dump_script.sh
-drwxr-xr-x  7 hadoop hadoop 4096 Jun  2 16:08 wedatasphere-dss-1.1.1/
-drwxr-xr-x  4 hadoop hadoop 4096 Jun  2 16:10 wedatasphere-dss-1.1.1-web/
+### 阿里云下载资源
+安装
+sudo curl -fsSL http://file.tickstep.com/apt/pgp | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/tickstep-packages-archive-keyring.gpg > /dev/null && echo "deb [signed-by=/etc/apt/trusted.gpg.d/tickstep-packages-archive-keyring.gpg arch=amd64,arm64] http://file.tickstep.com/apt aliyunpan main" | sudo tee /etc/apt/sources.list.d/tickstep-aliyunpan.list > /dev/null && sudo apt-get update && sudo apt-get install -y aliyunpan
+设置
+aliyunpan config set -transfer_url_type 2
+登录
+浏览器登录阿里云盘，console执行
+JSON.parse(localStorage.getItem("token")).refresh_token
+下载
 
-hadoop@node001:/home/hadoop$ ll
-total 64
-drwxr-xr-x 12 hadoop hadoop 4096 Jun  2 16:49 ./
-drwxr-xr-x 15 root   root   4096 Jun  2 15:51 ../
-drwx------  3 hadoop hadoop 4096 Jun  2 16:03 .ansible/
--rw-------  1 hadoop hadoop  168 Jun  2 16:49 .bash_history
--rw-r--r--  1 hadoop hadoop  220 Apr  5  2018 .bash_logout
-lrwxrwxrwx  1 hadoop hadoop   21 Jun  2 16:04 .bash_profile -> /home/hadoop/.profile
--rw-r--r--  1 hadoop hadoop 3771 Apr  5  2018 .bashrc
-drwx------  4 hadoop hadoop 4096 Jun  2 16:08 .cache/
-drwxrwxr-x  3 hadoop hadoop 4096 Jun  2 16:08 .config/
-drwxr-xr-x 10 hadoop hadoop 4096 Jun  2 16:10 dss/
-drwxr-xr-x  3 hadoop hadoop 4096 Jun  2 16:08 dss-bak/
-drwx------  3 hadoop hadoop 4096 Jun  2 16:03 .gnupg/
-drwxr-xr-x 12 hadoop hadoop 4096 Jun  2 16:06 linkis/
-drwxr-xr-x  3 hadoop hadoop 4096 Jun  2 16:03 linkis-back-1685693051/
-drwxrwxr-x  2 hadoop hadoop 4096 Jun  2 16:04 .oracle_jre_usage/
--rw-r--r--  1 hadoop hadoop  807 Apr  5  2018 .profile
-drwx------  2 hadoop hadoop 4096 Jun  2 16:10 .ssh/
-hadoop@node001:~$

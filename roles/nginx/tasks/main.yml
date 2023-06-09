@@ -13,10 +13,15 @@
   tags:
     - restart
 
+- name: 创建/opt/ansible-role-datasphere/目录
+  file:
+    path: /var/www/html
+    state: directory
+
 - name: 更新首页信息
   template:
     src: "index.html.j2"
-    dest: "/var/www/html/index.nginx-debian.html"
+    dest: "/usr/share/nginx/html/index.html"
 
 - name: 添加repo
   become: true

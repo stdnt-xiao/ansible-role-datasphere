@@ -26,18 +26,23 @@ deb [trusted=yes] http://localhost/HDP-UTILS/ubuntu18/1.1.0.22/ HDP-UTILS main
 deb [trusted=yes] http://localhost/HDP-GPL/ubuntu18/3.1.5.0-152/ HDP-GPL main
 EOF
 cp /opt/ansible-role-datasphere/roles/ambari/files/trusted.gpg /etc/apt/trusted.gpg.d/
+
+echo "deb http://nginx.org/packages/mainline/ubuntu/ bionic nginx" | sudo tee /etc/apt/sources.list.d/nginx.list
+wget http://nginx.org/keys/nginx_signing.key
+sudo apt-key add nginx_signing.key
+
 apt-get update
 
 # 缓存所有deb文件依赖
 cd /var/cache/apt/archives/
 apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances apache2 | grep "^\w" | sort -u)
 apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ambari-server | grep "^\w" | sort -u)
-apt-get -d -y install unzip apache2 ansible keepalived mysql-server-5.7 mysql-client-5.7 sshpass python-mysqldb python-pexpect python-pip python-apt python-apt-common telnet tar sed dos2unix unzip zip expect rsync lsof nginx
+apt-get -d -y install unzip apache2 ansible keepalived mysql-server-5.7 mysql-client-5.7 sshpass python-mysqldb python-pexpect python-pip python-apt python-apt-common telnet tar sed dos2unix unzip zip expect rsync lsof nginx python-pip-whl
 ls -l -R /var/www/html/ | grep deb | awk '{split($9, array, "_");print array[1]}' | xargs apt-get -d -y install
 
 # 生成离线debs包（过滤掉ambari、hdp）
 mkdir -p /var/cache/apt/archives/local
-diff <(ls -l -R /var/www/html/ | grep deb | awk '{print $9}' | sort) <(ls -l -R /var/cache/apt/archives/ | grep deb | awk '{print $9}' | sort) | grep ">" | awk '{print "/var/cache/apt/archives/"$2}' | xargs -i cp {} /var/cache/apt/archives/local/
+ls -l -R /var/cache/apt/archives/ | grep deb | awk '{print $9}' | grep -v 3.1.5.0-152 | grep -v 2.7.5.0-72 | awk '{print "/var/cache/apt/archives/"$1}' | xargs -i cp {} /var/cache/apt/archives/local/
 
 #离线软件打包
 cd /var/cache/apt/archives/

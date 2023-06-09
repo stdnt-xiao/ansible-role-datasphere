@@ -34,6 +34,15 @@
     - db.sh
     - config.sh
 
+- name: 修改安装配置
+  template:
+    src: "{{ item }}.j2"
+    dest: "/home/hadoop/datasphere_install/wedatasphere-dss-{{ DSS_VERSION }}/dss-{{ DSS_VERSION }}/sbin/{{ item }}"
+    owner: hadoop
+    group: hadoop
+  with_items:
+    - common.sh
+
 - name: 创建appconn脚本
   template:
     src: "appconn-install.sh.j2"

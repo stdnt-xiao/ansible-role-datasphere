@@ -12,14 +12,14 @@ DSS_VERSION={{ DSS_VERSION }}
 DSS_FILE_NAME="dss-$DSS_VERSION"
 
 ###  Linkis EUREKA  information.  # Microservices Service Registration Discovery Center
-EUREKA_INSTALL_IP=127.0.0.1
+EUREKA_INSTALL_IP={{ ansible_ssh_host }}
 EUREKA_PORT=20303
 ### If EUREKA  has safety verification, please fill in username and password
 #EUREKA_USERNAME=
 #EUREKA_PASSWORD=
 
 ### Linkis Gateway  information
-GATEWAY_INSTALL_IP=127.0.0.1
+GATEWAY_INSTALL_IP={{ ansible_ssh_host }}
 GATEWAY_PORT=9001
 
 ################### The install Configuration of all Micro-Services #####################
@@ -35,32 +35,32 @@ GATEWAY_PORT=9001
 ### This service is used to provide dss-server capability.
 
 ### project-server
-DSS_FRAMEWORK_PROJECT_SERVER_INSTALL_IP=127.0.0.1
+DSS_FRAMEWORK_PROJECT_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_FRAMEWORK_PROJECT_SERVER_PORT=9002
 ### orchestrator-server
-DSS_FRAMEWORK_ORCHESTRATOR_SERVER_INSTALL_IP=127.0.0.1
+DSS_FRAMEWORK_ORCHESTRATOR_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_FRAMEWORK_ORCHESTRATOR_SERVER_PORT=9003
 ### apiservice-server
-DSS_APISERVICE_SERVER_INSTALL_IP=127.0.0.1
+DSS_APISERVICE_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_APISERVICE_SERVER_PORT=9004
 ### dss-workflow-server
-DSS_WORKFLOW_SERVER_INSTALL_IP=127.0.0.1
+DSS_WORKFLOW_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_WORKFLOW_SERVER_PORT=9005
 ### dss-flow-execution-server
-DSS_FLOW_EXECUTION_SERVER_INSTALL_IP=127.0.0.1
+DSS_FLOW_EXECUTION_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_FLOW_EXECUTION_SERVER_PORT=9006
 ###dss-scriptis-server
-DSS_SCRIPTIS_SERVER_INSTALL_IP=127.0.0.1
+DSS_SCRIPTIS_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_SCRIPTIS_SERVER_PORT=9008
 
 ###dss-data-api-server
-DSS_DATA_API_SERVER_INSTALL_IP=127.0.0.1
+DSS_DATA_API_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_DATA_API_SERVER_PORT=9208
 ###dss-data-governance-server
-DSS_DATA_GOVERNANCE_SERVER_INSTALL_IP=127.0.0.1
+DSS_DATA_GOVERNANCE_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_DATA_GOVERNANCE_SERVER_PORT=9209
 ###dss-guide-server
-DSS_GUIDE_SERVER_INSTALL_IP=127.0.0.1
+DSS_GUIDE_SERVER_INSTALL_IP={{ ansible_ssh_host }}
 DSS_GUIDE_SERVER_PORT=9210
 
 ############## ############## dss_appconn_instance configuration   start   ############## ##############
